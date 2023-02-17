@@ -1,0 +1,107 @@
+/*
+                               Har Har Mahadev
+ */
+import java.io.*;
+import java.util.StringTokenizer;
+import java.util.*;
+
+public class Main {
+   public static Reader in;
+    public static PrintWriter out;
+    public static long mod = 998244353;
+    static StringBuilder ans = new StringBuilder(0);
+    public static void main(String[] args) {
+        out = new PrintWriter(new BufferedOutputStream(System.out));
+        in = new Reader();
+
+        int t=1;
+       // t=in.nextInt();
+        while(t-->0){
+            solve();
+        }
+        out.close();
+
+    }
+    public static void solve(){
+        int n = in.nextInt();
+        long way=1;
+        for(int i=0; i<(n/3); i++){
+            int[] temp = new int[3];
+            for(int j=0; j<3; j++) temp[j] = in.nextInt();
+            Arrays.sort(temp);
+            if(temp[0] == temp[2]) way*=3L;
+            else if(temp[1]==temp[0]) way*=2L;
+            way%=mod;
+        }
+        way*=Combi.ncr(n/3, n/6);
+        way%=mod;
+        out.println(way);
+
+
+
+
+
+
+    }
+
+
+
+
+    public static long gcd(long  a, long b){
+        if(a==0) return b;
+        if(b==0) return a;
+        return gcd(b%a, a);
+    }
+    public static long pow(long a, long b){
+        if(b==0) return 1;
+        long x=pow(a, b/2);
+        x*=x;
+        if(b%2==1) x*=a;
+        return x;
+    }
+
+    static class Reader {
+        private BufferedReader br;
+        private StringTokenizer st;
+
+        Reader() {
+            br = new BufferedReader(new InputStreamReader(System.in));
+        }
+
+        String next() {
+            try {
+                while (st == null || !st.hasMoreTokens()) {
+                    st = new StringTokenizer(br.readLine());
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return st.nextToken();
+        }
+
+        int nextInt() {
+            return Integer.parseInt(next());
+        }
+
+        int[] nextIntArray(int n) {
+            int[] arr = new int[n];
+            for (int i = 0; i < n; i++)
+                arr[i] = nextInt();
+            return arr;
+        }
+
+        long nextLong() {
+            return Long.parseLong(next());
+        }
+
+        String nextLine() {
+            String s = "";
+            try {
+                s = br.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return s;
+        }
+    }
+}
