@@ -1,0 +1,47 @@
+class Combi{
+    private static long[] fact , inverse;
+    static int sizf = 1, sizi = 1;
+    static {
+        fact = new long[1]; fact[0]=1;
+        inverse = new long[1]; inverse[0] = 1;
+    }
+
+    static long gfact(long idx){
+        if(idx<sizf) return fact[(int) idx];
+        long[] tempf = new long[sizf+sizf];
+
+        for(int i=0; i<sizf; i++) tempf[i]=fact[i];
+        for(int i=sizf; i<sizf+sizf; i++) tempf[i] = (i*tempf[i-1]) % Main.mod;
+        fact = tempf;
+        sizf+=sizf;
+        return gfact(idx);
+
+    }
+    static long gIfact(long idx){
+        if(idx<sizi) return inverse[(int) idx];
+        long[] tempif = new long[sizi+sizi];
+        for(int i=0; i<sizi; i++) tempif[i] = inverse[i];
+        tempif[sizi+sizi-1] = bigmod(fact[sizi+sizi-1] , Main.mod - 2);
+        for(int i=sizi+sizi-2; i>=sizi; i--) tempif[i] = (tempif[i+1] * (i+1)) % Main.mod;
+        inverse = tempif;
+        sizi+=sizi;
+        return gIfact(idx);
+    }
+
+    public static long npr(long n, long r){
+        return (gfact(n) * gIfact(n-r))%Main.mod;
+    }
+
+    public static long ncr(long n, long r){
+        return (npr(n,r) * gIfact(r))% Main.mod;
+    }
+    public static long bigmod(long n, long power){
+        if(power==0) return 1;
+        long x = bigmod(n, power/2);
+        x*=x; x%=Main.mod;
+        if(power%2==1) x*=n;
+        return x%Main.mod;
+    }
+
+
+}
