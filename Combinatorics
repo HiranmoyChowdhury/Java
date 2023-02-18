@@ -1,12 +1,12 @@
 class Combi{
     private static long[] fact , inverse;
-    static int sizf = 1, sizi = 1;
+    private static int sizf = 1, sizi = 1;
     static {
         fact = new long[1]; fact[0]=1;
         inverse = new long[1]; inverse[0] = 1;
     }
 
-    static long gfact(long idx){
+    public static long gfact(long idx){
         if(idx<sizf) return fact[(int) idx];
         long[] tempf = new long[sizf+sizf];
 
@@ -17,7 +17,7 @@ class Combi{
         return gfact(idx);
 
     }
-    static long gIfact(long idx){
+    public static long gIfact(long idx){
         if(idx<sizi) return inverse[(int) idx];
         long[] tempif = new long[sizi+sizi];
         for(int i=0; i<sizi; i++) tempif[i] = inverse[i];
