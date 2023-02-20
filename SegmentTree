@@ -1,0 +1,109 @@
+class SegmentTree {
+    private long[] arr, mnST, mxST, addST;
+    private int siz , position ;
+    private long val;
+    private int lftMost, rghtMost;
+
+    public void create_mn(int siz){
+        arr = new long[siz+1];
+        this.siz = siz;
+        mnST = new long[(siz*4)+5];
+    }
+    public void create_mx(int siz){
+        this.siz = siz;
+        arr = new long[siz+1];
+        mxST = new long[(siz*4)+5];
+    }
+    public void create_add(int siz){
+        this.siz = siz;
+        arr = new long[siz+1];
+        addST = new long[(siz*4)+5];
+    }
+
+
+
+    public void update_mn(int position, long val){
+        this.position=position; this.val = val;
+        arr[position] = val;
+        Update_mn(1, 1, siz);
+    }
+    public void update_mx(int position, long val){
+        this.position=position; this.val = val;
+        arr[position] = val;
+        Update_mx(1, 1, siz);
+    }
+    public void update_add(int position, long val){
+        this.position=position; this.val = val;
+        arr[position] = val;
+        Update_add(1, 1, siz);
+    }
+
+    private void Update_mn(int n, int l, int r){
+        if(l>this.position || r<this.position) return;
+
+        if(l==r){
+            mnST[n] = this.val;
+            return;
+        }
+        int n1 = n+n, n2 = n+n+1, mid = (l+r)/2;
+        Update_mn(n1, l, mid); Update_mn(n2, mid+1, r);
+        mnST[n] = Math.min(mnST[n1] , mnST[n2]);
+    }
+    private void Update_mx(int n, int l, int r){
+        if(l>this.position || r<this.position) return;
+
+        if(l==r){
+            mxST[n] = this.val;
+            return;
+        }
+        int n1 = n+n, n2 = n+n+1, mid = (l+r)/2;
+        Update_mx(n1, l, mid); Update_mx(n2, mid+1, r);
+        mxST[n] = Math.max(mxST[n1], mxST[n2]);
+    }
+    private void Update_add(int n, int l, int r){
+        if(l>this.position || r<this.position) return;
+
+        if(l==r){
+            addST[n] = this.val;
+            return;
+        }
+        int n1 = n+n, n2 = n+n+1, mid = (l+r)/2;
+        Update_add(n1, l, mid); Update_add(n2, mid+1, r);
+        addST[n] = addST[n1]+ addST[n2];
+    }
+
+
+    public long get_mn(int lftMost, int rghtMost){
+        this.lftMost = lftMost; this.rghtMost = rghtMost;
+        return get_mn(1, 1, siz);
+    }
+    public long get_mx(int lftMost, int rghtMost){
+        this.lftMost = lftMost; this.rghtMost = rghtMost;
+        return get_mx(1, 1, siz);
+    }
+    public long get_add(int lftMost, int rghtMost){
+        this.lftMost = lftMost; this.rghtMost = rghtMost;
+        return get_add(1, 1, siz);
+    }
+
+    private long get_mn(int n, int l, int r){
+        if(l>rghtMost || r<lftMost) return Main.intmx;
+        if(l>=lftMost && r<=rghtMost) return mnST[n];
+        int n1 = n+n, n2 = n+n+1, mid = (l+r)/2;
+        return Math.min( get_mn(n1, l, mid) , get_mn(n2, mid+1, r) );
+    }
+    private long get_mx(int n, int l, int r){
+        if(l>rghtMost || r<lftMost) return Main.intmn;
+        if(l>=lftMost && r<=rghtMost) return mxST[n];
+        int n1 = n+n, n2 = n+n+1, mid = (l+r)/2;
+        return Math.max( get_mx(n1, l, mid) , get_mx(n2, mid+1, r) );
+    }
+    private long get_add(int n, int l, int r){
+        if(l>rghtMost || r<lftMost) return 0L;
+        if(l>=lftMost && r<=rghtMost) return addST[n];
+        int n1 = n+n, n2 = n+n+1, mid = (l+r)/2;
+        return get_add(n1, l, mid) + get_add(n2, mid+1, r) ;
+    }
+
+
+}
